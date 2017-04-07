@@ -1,0 +1,251 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/TooTallNate/node-plist#readme"
+
+    >plist (v2.0.1)</a>
+</h1>
+<h4>Mac OS X Plist parser/builder for Node.js and browsers</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.plist">module plist</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.plist.build">
+            function <span class="apidocSignatureSpan">plist.</span>build
+            <span class="apidocSignatureSpan">(obj, opts)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.plist.parse">
+            function <span class="apidocSignatureSpan">plist.</span>parse
+            <span class="apidocSignatureSpan">(xml)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.plist.parse">module plist.parse</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.plist.parse.parse">
+            function <span class="apidocSignatureSpan">plist.</span>parse
+            <span class="apidocSignatureSpan">(xml)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.plist" id="apidoc.module.plist">module plist</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.plist.build" id="apidoc.element.plist.build">
+        function <span class="apidocSignatureSpan">plist.</span>build
+        <span class="apidocSignatureSpan">(obj, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function build(obj, opts) {
+  var XMLHDR = {
+    version: &#x27;1.0&#x27;,
+    encoding: &#x27;UTF-8&#x27;
+  };
+
+  var XMLDTD = {
+    pubid: &#x27;-//Apple//DTD PLIST 1.0//EN&#x27;,
+    sysid: &#x27;http://www.apple.com/DTDs/PropertyList-1.0.dtd&#x27;
+  };
+
+  var doc = xmlbuilder.create(&#x27;plist&#x27;);
+
+  doc.dec(XMLHDR.version, XMLHDR.encoding, XMLHDR.standalone);
+  doc.dtd(XMLDTD.pubid, XMLDTD.sysid);
+  doc.att(&#x27;version&#x27;, &#x27;1.0&#x27;);
+
+  walk_obj(obj, doc);
+
+  if (!opts) opts = {};
+  // default `pretty` to `true`
+  opts.pretty = opts.pretty !== false;
+  return doc.end(opts);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    &#x22;bundle-identifier&#x22;: &#x22;com.company.app&#x22;,
+    &#x22;bundle-version&#x22;: &#x22;0.1.1&#x22;,
+    &#x22;kind&#x22;: &#x22;software&#x22;,
+    &#x22;title&#x22;: &#x22;AppName&#x22;
+  }
+];
+
+console.log(plist.<span class="apidocCodeKeywordSpan">build</span>(json));
+
+// &#x3c;?xml version=&#x22;1.0&#x22; encoding=&#x22;UTF-8&#x22;?&#x3e;
+// &#x3c;!DOCTYPE plist PUBLIC &#x22;-//Apple//DTD PLIST 1.0//EN&#x22; &#x22;http://www.apple.com/DTDs/PropertyList-1.0.dtd&#x22
+;&#x3e;
+// &#x3c;plist version=&#x22;1.0&#x22;&#x3e;
+//   &#x3c;key&#x3e;metadata&#x3c;/key&#x3e;
+//   &#x3c;dict&#x3e;
+//     &#x3c;key&#x3e;bundle-identifier&#x3c;/key&#x3e;
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.plist.parse" id="apidoc.element.plist.parse">
+        function <span class="apidocSignatureSpan">plist.</span>parse
+        <span class="apidocSignatureSpan">(xml)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function parse(xml) {
+  var doc = new DOMParser().parseFromString(xml);
+  if (doc.documentElement.nodeName !== &#x27;plist&#x27;) {
+    throw new Error(&#x27;malformed document. First element should be &#x3c;plist&#x3e;&#x27;);
+  }
+  var plist = parsePlistXML(doc.documentElement);
+
+  // the root &#x3c;plist&#x3e; node gets interpreted as an Array,
+  // so pull out the inner data first
+  if (plist.length == 1) plist = plist[0];
+
+  return plist;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+Then `require()` the _plist_ module in your file:
+
+``` js
+var plist = require(&#x27;plist&#x27;);
+
+// now use the `parse()` and `build()` functions
+var val = plist.<span class="apidocCodeKeywordSpan">parse</span>(&#x27;&#x3c;plist&#x3e;&#x3c;string&#x3e;Hello World!&#x3c;/string
+&#x3e;&#x3c;/plist&#x3e;&#x27;);
+console.log(val);  // &#x22;Hello World!&#x22;
+```
+
+
+### Browser
+
+Include the `dist/plist.js` in a `&#x3c;script&#x3e;` tag in your HTML file:
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.plist.parse" id="apidoc.module.plist.parse">module plist.parse</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.plist.parse.parse" id="apidoc.element.plist.parse.parse">
+        function <span class="apidocSignatureSpan">plist.</span>parse
+        <span class="apidocSignatureSpan">(xml)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function parse(xml) {
+  var doc = new DOMParser().parseFromString(xml);
+  if (doc.documentElement.nodeName !== &#x27;plist&#x27;) {
+    throw new Error(&#x27;malformed document. First element should be &#x3c;plist&#x3e;&#x27;);
+  }
+  var plist = parsePlistXML(doc.documentElement);
+
+  // the root &#x3c;plist&#x3e; node gets interpreted as an Array,
+  // so pull out the inner data first
+  if (plist.length == 1) plist = plist[0];
+
+  return plist;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+Then `require()` the _plist_ module in your file:
+
+``` js
+var plist = require(&#x27;plist&#x27;);
+
+// now use the `parse()` and `build()` functions
+var val = plist.<span class="apidocCodeKeywordSpan">parse</span>(&#x27;&#x3c;plist&#x3e;&#x3c;string&#x3e;Hello World!&#x3c;/string
+&#x3e;&#x3c;/plist&#x3e;&#x27;);
+console.log(val);  // &#x22;Hello World!&#x22;
+```
+
+
+### Browser
+
+Include the `dist/plist.js` in a `&#x3c;script&#x3e;` tag in your HTML file:
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
