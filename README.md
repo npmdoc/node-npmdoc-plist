@@ -1,9 +1,14 @@
-# api documentation for  [plist (v2.0.1)](https://github.com/TooTallNate/node-plist#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-plist.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-plist) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-plist.svg)](https://travis-ci.org/npmdoc/node-npmdoc-plist)
+# npmdoc-plist
+
+#### api documentation for  [plist (v2.0.1)](https://github.com/TooTallNate/node-plist#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-plist.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-plist) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-plist.svg)](https://travis-ci.org/npmdoc/node-npmdoc-plist)
+
 #### Mac OS X Plist parser/builder for Node.js and browsers
 
-[![NPM](https://nodei.co/npm/plist.png?downloads=true)](https://www.npmjs.com/package/plist)
+[![NPM](https://nodei.co/npm/plist.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/plist)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-plist/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-plist_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-plist/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-plist/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-plist/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-plist/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-plist/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-plist/build/screenCapture.npmPackageListing.svg)
 
@@ -17,23 +22,20 @@
 
 {
     "author": {
-        "name": "Nathan Rajlich",
-        "email": "nathan@tootallnate.net"
+        "name": "Nathan Rajlich"
     },
     "bugs": {
         "url": "https://github.com/TooTallNate/node-plist/issues"
     },
     "contributors": [
         {
-            "name": "Hans Huebner",
-            "email": "hans.huebner@gmail.com"
+            "name": "Hans Huebner"
         },
         {
             "name": "Pierre Metrailler"
         },
         {
-            "name": "Mike Reinstein",
-            "email": "reinstein.mike@gmail.com"
+            "name": "Mike Reinstein"
         },
         {
             "name": "Vladimir Tsvang"
@@ -73,21 +75,17 @@
     "main": "index.js",
     "maintainers": [
         {
-            "name": "TooTallNate",
-            "email": "nathan@tootallnate.net"
+            "name": "TooTallNate"
         },
         {
-            "name": "tootallnate",
-            "email": "nathan@tootallnate.net"
+            "name": "tootallnate"
         },
         {
-            "name": "mreinstein",
-            "email": "reinstein.mike@gmail.com"
+            "name": "mreinstein"
         }
     ],
     "name": "plist",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git://github.com/TooTallNate/node-plist.git"
@@ -97,150 +95,6 @@
     },
     "version": "2.0.1"
 }
-```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module plist](#apidoc.module.plist)
-1.  [function <span class="apidocSignatureSpan">plist.</span>build (obj, opts)](#apidoc.element.plist.build)
-1.  [function <span class="apidocSignatureSpan">plist.</span>parse (xml)](#apidoc.element.plist.parse)
-
-#### [module plist.parse](#apidoc.module.plist.parse)
-1.  [function <span class="apidocSignatureSpan">plist.</span>parse (xml)](#apidoc.element.plist.parse.parse)
-
-
-
-# <a name="apidoc.module.plist"></a>[module plist](#apidoc.module.plist)
-
-#### <a name="apidoc.element.plist.build"></a>[function <span class="apidocSignatureSpan">plist.</span>build (obj, opts)](#apidoc.element.plist.build)
-- description and source-code
-```javascript
-function build(obj, opts) {
-  var XMLHDR = {
-    version: '1.0',
-    encoding: 'UTF-8'
-  };
-
-  var XMLDTD = {
-    pubid: '-//Apple//DTD PLIST 1.0//EN',
-    sysid: 'http://www.apple.com/DTDs/PropertyList-1.0.dtd'
-  };
-
-  var doc = xmlbuilder.create('plist');
-
-  doc.dec(XMLHDR.version, XMLHDR.encoding, XMLHDR.standalone);
-  doc.dtd(XMLDTD.pubid, XMLDTD.sysid);
-  doc.att('version', '1.0');
-
-  walk_obj(obj, doc);
-
-  if (!opts) opts = {};
-  // default 'pretty' to 'true'
-  opts.pretty = opts.pretty !== false;
-  return doc.end(opts);
-}
-```
-- example usage
-```shell
-...
-    "bundle-identifier": "com.company.app",
-    "bundle-version": "0.1.1",
-    "kind": "software",
-    "title": "AppName"
-  }
-];
-
-console.log(plist.build(json));
-
-// <?xml version="1.0" encoding="UTF-8"?>
-// <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-// <plist version="1.0">
-//   <key>metadata</key>
-//   <dict>
-//     <key>bundle-identifier</key>
-...
-```
-
-#### <a name="apidoc.element.plist.parse"></a>[function <span class="apidocSignatureSpan">plist.</span>parse (xml)](#apidoc.element.plist.parse)
-- description and source-code
-```javascript
-function parse(xml) {
-  var doc = new DOMParser().parseFromString(xml);
-  if (doc.documentElement.nodeName !== 'plist') {
-    throw new Error('malformed document. First element should be <plist>');
-  }
-  var plist = parsePlistXML(doc.documentElement);
-
-  // the root <plist> node gets interpreted as an Array,
-  // so pull out the inner data first
-  if (plist.length == 1) plist = plist[0];
-
-  return plist;
-}
-```
-- example usage
-```shell
-...
-
-Then 'require()' the _plist_ module in your file:
-
-''' js
-var plist = require('plist');
-
-// now use the 'parse()' and 'build()' functions
-var val = plist.parse('<plist><string>Hello World!</string></plist>');
-console.log(val);  // "Hello World!"
-'''
-
-
-### Browser
-
-Include the 'dist/plist.js' in a '<script>' tag in your HTML file:
-...
-```
-
-
-
-# <a name="apidoc.module.plist.parse"></a>[module plist.parse](#apidoc.module.plist.parse)
-
-#### <a name="apidoc.element.plist.parse.parse"></a>[function <span class="apidocSignatureSpan">plist.</span>parse (xml)](#apidoc.element.plist.parse.parse)
-- description and source-code
-```javascript
-function parse(xml) {
-  var doc = new DOMParser().parseFromString(xml);
-  if (doc.documentElement.nodeName !== 'plist') {
-    throw new Error('malformed document. First element should be <plist>');
-  }
-  var plist = parsePlistXML(doc.documentElement);
-
-  // the root <plist> node gets interpreted as an Array,
-  // so pull out the inner data first
-  if (plist.length == 1) plist = plist[0];
-
-  return plist;
-}
-```
-- example usage
-```shell
-...
-
-Then 'require()' the _plist_ module in your file:
-
-''' js
-var plist = require('plist');
-
-// now use the 'parse()' and 'build()' functions
-var val = plist.parse('<plist><string>Hello World!</string></plist>');
-console.log(val);  // "Hello World!"
-'''
-
-
-### Browser
-
-Include the 'dist/plist.js' in a '<script>' tag in your HTML file:
-...
 ```
 
 
